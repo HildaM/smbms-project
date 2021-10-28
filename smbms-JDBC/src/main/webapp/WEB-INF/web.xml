@@ -4,6 +4,8 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
+<!--    过滤器 starts -->
+
     <!-- 字符编码过滤器  -->
     <filter>
         <filter-name>CharacterEncodingFilter</filter-name>
@@ -14,12 +16,24 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    
+    <!--  用户登录过滤器  -->
+    <filter>
+        <filter-name>SysFilter</filter-name>
+        <filter-class>com.quan.filter.SysFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SysFilter</filter-name>
+        <url-pattern>/jsp/*</url-pattern>
+    </filter-mapping>
+<!--    过滤器 ends-->
+
     <!-- 设置欢迎页面  -->
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
 
+
+<!--    servlet starts-->
 
     <!-- LoginServlet：登录验证  -->
     <servlet>
@@ -30,5 +44,27 @@
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login.do</url-pattern>
     </servlet-mapping>
+    
+    <!-- 注销登录 -->
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>com.quan.servlet.user.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/jsp/logout.do</url-pattern>
+    </servlet-mapping>
+    
+    <!-- UserServlet -->
+    <servlet>
+        <servlet-name>UserServlet</servlet-name>
+        <servlet-class>com.quan.servlet.user.UserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/jsp/user.do</url-pattern>
+    </servlet-mapping>
+
+<!--   servlet ends-->
 
 </web-app>

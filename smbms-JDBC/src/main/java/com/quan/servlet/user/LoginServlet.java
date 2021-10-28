@@ -20,7 +20,7 @@ public class LoginServlet extends HttpServlet {
     // Servlet 调用业务层代码
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("进入LoginServlet");
+        // System.out.println("进入LoginServlet");
 
         // 获取用户名和密码
         String userCode = req.getParameter("userCode");

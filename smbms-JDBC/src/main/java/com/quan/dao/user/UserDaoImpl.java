@@ -2,6 +2,7 @@ package com.quan.dao.user;
 
 import com.quan.pojo.User;
 import com.quan.util.BaseDao;
+import com.sun.corba.se.spi.ior.ObjectAdapterId;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,7 +24,7 @@ public class UserDaoImpl implements UserDao{
 
         // 以防为空
         if (connection != null) {
-            String sql = "select * from smbms_user where userCode=?";
+            String sql = "select * from smbms_user where userCode = ?";
             Object[] params = {userCode};
 
             // execute(connection, sql, params, rs, preparedStatement)
@@ -51,5 +52,23 @@ public class UserDaoImpl implements UserDao{
         }
 
         return user;
+    }
+
+
+    // 修改当前用户密码
+    @Override
+    public int updatePwd(Connection connection, int id, int password) throws SQLException {
+        PreparedStatement pstm = null;
+        int execute = 0;
+
+        if (null != connection) {
+            String sql = "update smbms_user set userPassword = ? where id = ?";
+            Object[] params = {password, id};
+            execute = BaseDao.execute(connection, sql, params, pstm);
+
+            BaseDao.closeResource(connection, null, pstm);
+        }
+
+        return execute;
     }
 }
