@@ -51,8 +51,10 @@ public class BaseDao {
         return connection;
     }
 
-    // 处理预编译sql的私有工具类
-    private static void preCompile(Connection connection, String sql, Object[] params, PreparedStatement preparedStatement) throws SQLException {
+
+
+    // 编写查询公共方法
+    public static ResultSet execute(Connection connection, String sql, Object[] params, ResultSet resultSet, PreparedStatement preparedStatement) throws SQLException {
         // 预编译的 sql，在后面直接执行就可以了
         preparedStatement = connection.prepareStatement(sql);
 
@@ -60,13 +62,6 @@ public class BaseDao {
             // setObject 占位符从 1 开始，但是数组从 0 开始
             preparedStatement.setObject(i + 1, params[i]);
         }
-    }
-
-
-    // 编写查询公共方法
-    public static ResultSet execute(Connection connection, String sql, Object[] params, ResultSet resultSet, PreparedStatement preparedStatement) throws SQLException {
-        // 预编译sql代码
-        preCompile(connection, sql, params, preparedStatement);
 
         resultSet = preparedStatement.executeQuery();
         return resultSet;
@@ -75,8 +70,13 @@ public class BaseDao {
 
     // 编写增删改公共方法
     public static int execute(Connection connection, String sql, Object[] params, PreparedStatement preparedStatement) throws SQLException {
-        // 预编译sql代码
-        preCompile(connection, sql, params, preparedStatement);
+        // 预编译的 sql，在后面直接执行就可以了
+        preparedStatement = connection.prepareStatement(sql);
+
+        for (int i = 0; i < params.length; i++) {
+            // setObject 占位符从 1 开始，但是数组从 0 开始
+            preparedStatement.setObject(i + 1, params[i]);
+        }
 
         int updateRows = preparedStatement.executeUpdate();
         return updateRows;
