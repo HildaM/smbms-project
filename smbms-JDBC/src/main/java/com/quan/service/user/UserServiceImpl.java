@@ -56,7 +56,9 @@ public class UserServiceImpl implements UserService{
 
     // 修改当前用户密码
     @Override
-    public boolean updatePwd(int id, int password) {
+    public boolean updatePwd(int id, String password) {
+        System.out.println("UserServletImpl" + password);
+
         Connection connection = null;
         boolean flag = false;
 

@@ -16,5 +16,5 @@ public interface UserService {
     public User login(String userCode, String password);
 
     // 修改当前用户密码
-    public boolean updatePwd(int id, int password);
+    public boolean updatePwd(int id, String password);
 }

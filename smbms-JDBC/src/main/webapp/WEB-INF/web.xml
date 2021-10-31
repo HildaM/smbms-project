@@ -27,11 +27,19 @@
     </filter-mapping>
 <!--    过滤器 ends-->
 
+<!--    网站的通用配置 starts-->
+
     <!-- 设置欢迎页面  -->
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
 
+    <!-- 默认Session过期时间  -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+<!--    网站通用配置 ends-->
 
 <!--    servlet starts-->
 

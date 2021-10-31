@@ -29,7 +29,9 @@ public class SysFilter implements Filter {
         User user = (User) request.getSession().getAttribute(Constants.USER_SESSION);
 
         if (null == user) {  // 被移除、被注销、未登录
-            response.sendRedirect(request.getContextPath() + "error.jsp");
+            // 目前只有“请求转发”可以正常运行，重定向会导致浏览器报错，原因为明！
+            request.getRequestDispatcher(request.getContextPath() + "error.jsp").forward(request, response);
+//            response.sendRedirect(request.getContextPath() + "error.jsp");
         }
 
         chain.doFilter(req, resp);

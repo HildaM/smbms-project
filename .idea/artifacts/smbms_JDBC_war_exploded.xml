@@ -28,6 +28,7 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-core:5.3.11" />
           <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.3.11" />
           <element id="library" level="project" name="Maven: org.springframework:spring-expression:5.3.11" />
+          <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.78" />
         </element>
       </element>
       <element id="directory" name="META-INF">

@@ -57,7 +57,9 @@ public class UserDaoImpl implements UserDao{
 
     // 修改当前用户密码
     @Override
-    public int updatePwd(Connection connection, int id, int password) throws SQLException {
+    public int updatePwd(Connection connection, int id, String password) throws SQLException {
+        System.out.println("UserDaoImpl" + password);
+
         PreparedStatement pstm = null;
         int execute = 0;
 
