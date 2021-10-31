@@ -7,6 +7,8 @@ import com.quan.util.BaseDao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @ClassName: UserServiceImpl
@@ -57,7 +59,8 @@ public class UserServiceImpl implements UserService{
     // 修改当前用户密码
     @Override
     public boolean updatePwd(int id, String password) {
-        System.out.println("UserServletImpl" + password);
+        // 测试代码
+//        System.out.println("UserServletImpl" + password);
 
         Connection connection = null;
         boolean flag = false;
@@ -77,4 +80,44 @@ public class UserServiceImpl implements UserService{
 
         return flag;
     }
+
+
+    // 根据用户名或角，查询用户数量
+    @Override
+    public int getUserCount(String userName, int userRole) {
+        Connection connection = null;
+        int userCount = 0;
+
+        try {
+            connection = BaseDao.getConnection();
+            userCount = userDao.getUserCount(connection, userName, userRole);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            BaseDao.closeResource(connection, null, null);
+        }
+
+        return userCount;
+    }
+
+    // 获取角色列表
+    @Override
+    public List<User> getUserList(String userName, int userRole, int currentPageNo, int pageSize) {
+        Connection connection = null;
+        List<User> userList = null;
+
+        try {
+            connection = BaseDao.getConnection();
+            userList = userDao.getUserList(connection, userName, userRole, currentPageNo, pageSize);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            BaseDao.closeResource(connection, null, null);
+        }
+
+        return userList;
+    }
+
 }

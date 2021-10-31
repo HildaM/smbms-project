@@ -4,6 +4,7 @@ import com.quan.pojo.User;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * @ClassName: UserService
@@ -17,4 +18,10 @@ public interface UserService {
 
     // 修改当前用户密码
     public boolean updatePwd(int id, String password);
+
+    // 根据用户名或角，查询用户数量
+    public int getUserCount(String userName, int userRole);
+
+    // 获取用户列表
+    public List<User> getUserList(String userName, int userRole, int currentPageNo, int pageSize);
 }

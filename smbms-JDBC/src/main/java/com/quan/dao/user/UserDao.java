@@ -4,6 +4,7 @@ import com.quan.pojo.User;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * @ClassName: UserDao
@@ -17,4 +18,11 @@ public interface UserDao {
 
     // 修改当前用户密码
     public int updatePwd(Connection connection, int id, String password) throws SQLException;
+
+    // 根据用户名或角，查询用户数量
+    public int getUserCount(Connection connection, String userName, int userRole) throws SQLException;
+
+    // 获取用户列表
+    public List<User> getUserList(Connection connection, String userName, int userRole,
+                                  int currentPageNo, int pageSize) throws Exception;
 }
