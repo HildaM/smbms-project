@@ -40,3 +40,7 @@
      </div>
      <input type="hidden" id="path" name="path" value="${pageContext.request.contextPath }"/>
      <input type="hidden" id="referer" name="referer" value="<%=request.getHeader("Referer")%>"/>
+
+
+<%--此处必须要这样写，页面才能正常展示，至于为什么有也不知道？？？
+    前端静态资源我是用别人的。。。。--%>

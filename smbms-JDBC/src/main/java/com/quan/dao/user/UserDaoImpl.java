@@ -1,6 +1,7 @@
 package com.quan.dao.user;
 
 import com.mysql.cj.util.StringUtils;
+import com.quan.pojo.Role;
 import com.quan.pojo.User;
 import com.quan.util.BaseDao;
 import com.sun.corba.se.spi.ior.ObjectAdapterId;
@@ -110,9 +111,9 @@ public class UserDaoImpl implements UserDao{
                 // 从结果集中获取结果集数量
                 count = rs.getInt("count");
             }
-        }
 
-        BaseDao.closeResource(null, rs, pstm);
+            BaseDao.closeResource(null, rs, pstm);
+        }
 
         return count;
     }
@@ -163,9 +164,9 @@ public class UserDaoImpl implements UserDao{
                 _user.setUserRoleName(rs.getString("userRoleName"));
                 userList.add(_user);
             }
-        }
 
-        BaseDao.closeResource(null, rs, pstm);
+            BaseDao.closeResource(null, rs, pstm);
+        }
 
         return userList;
     }

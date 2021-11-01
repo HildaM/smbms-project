@@ -1,5 +1,6 @@
 package com.quan.dao.user;
 
+import com.quan.pojo.Role;
 import com.quan.pojo.User;
 
 import java.sql.Connection;
