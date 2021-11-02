@@ -148,9 +148,9 @@ public class UserDaoImpl implements UserDao{
             list.add(currentPageNo);
             list.add(pageSize);
 
-            Object[] params = list.toArray();
-            System.out.println("UserDaoImpl---getUserList:" + sql.toString());
+            // System.out.println("UserDaoImpl---getUserList:" + sql.toString());
 
+            Object[] params = list.toArray();
             rs = BaseDao.execute(connection, sql.toString(), params, rs, pstm);
             while (rs.next()) {
                 User _user = new User();
@@ -169,5 +169,79 @@ public class UserDaoImpl implements UserDao{
         }
 
         return userList;
+    }
+
+    // 添加用户
+    @Override
+    public boolean addUser(Connection connection, User user) throws SQLException {
+        PreparedStatement pstm = null;
+        boolean flag = false;
+
+        if (connection != null) {
+            String sql = "insert into smbms_user (id, userCode, userName, userPassword, gender, birthday, phone, address, userRole, createdBy, creationDate, modifyBy, modifyDate) values (?, ?, ?, ?, ?, ?, ? ,? ,? ,? ,?, ?, ?)";
+
+            // 注入参数
+            ArrayList<Object> tempParams = new ArrayList<>();
+            tempParams.add(user.getId());
+            tempParams.add(user.getUserCode());
+            tempParams.add(user.getUserName());
+            tempParams.add(user.getUserPassword());
+            tempParams.add(user.getGender());
+            tempParams.add(user.getBirthday());
+            tempParams.add(user.getPhone());
+            tempParams.add(user.getAddress());
+            tempParams.add(user.getUserRole());
+            tempParams.add(user.getCreatedBy());
+            tempParams.add(user.getCreationDate());
+            tempParams.add(user.getModifyBy());
+            tempParams.add(user.getModifyDate());
+
+            Object[] params = tempParams.toArray();
+
+            if (BaseDao.execute(connection, sql, params, pstm) > 0) {
+                // 成功添加
+                flag = true;
+            }
+
+            BaseDao.closeResource(null, null, pstm);
+        }
+
+        return flag;
+    }
+
+    // 根据userCode查询用户
+    @Override
+    public User getUserByUserCode(Connection connection, String userCode) throws SQLException {
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        User user = null;
+
+        if (connection != null) {
+            String sql = "select * from smbms_user where userCode = ?";
+            Object[] params = {userCode};
+
+            rs = BaseDao.execute(connection, sql, params, rs, pstm);
+
+            if (rs.next()) {
+                user = new User();
+                user.setId(rs.getInt("id"));
+                user.setUserCode(rs.getString("userCode"));
+                user.setUserName(rs.getString("userName"));
+                user.setUserPassword(rs.getString("userPassword"));
+                user.setGender(rs.getInt("gender"));
+                user.setBirthday(rs.getDate("birthday"));
+                user.setPhone(rs.getString("phone"));
+                user.setAddress(rs.getString("address"));
+                user.setUserRole(rs.getInt("userRole"));
+                user.setCreatedBy(rs.getInt("createdBy"));
+                user.setCreationDate(rs.getTimestamp("creationDate"));
+                user.setModifyBy(rs.getInt("modifyBy"));
+                user.setModifyDate(rs.getTimestamp("modifyDate"));
+            }
+
+            BaseDao.closeResource(null, rs, pstm);
+        }
+
+        return user;
     }
 }

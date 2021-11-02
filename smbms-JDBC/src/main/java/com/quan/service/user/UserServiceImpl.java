@@ -120,4 +120,43 @@ public class UserServiceImpl implements UserService{
         return userList;
     }
 
+
+    // 添加用户
+    @Override
+    public boolean addUser(User user) {
+        Connection connection = null;
+        boolean flag = false;
+
+        try {
+            connection = BaseDao.getConnection();
+            if (userDao.addUser(connection, user)) {
+                flag = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            BaseDao.closeResource(connection, null, null);
+        }
+
+        return flag;
+    }
+
+    // 根据userCode查询用户
+    @Override
+    public User getUserByUserCode(String userCode) {
+        Connection connection = null;
+        User user = null;
+
+        try {
+            connection = BaseDao.getConnection();
+            user = userDao.getUserByUserCode(connection, userCode);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            BaseDao.closeResource(connection, null, null);
+        }
+
+        return user;
+    }
+
 }

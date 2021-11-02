@@ -66,9 +66,9 @@ $(function(){
 			data:{method:"ucexist",userCode:userCode.val()},//请求参数
 			dataType:"json",//ajax接口（请求url）返回的数据类型
 			success:function(data){//data：返回数据（json对象）
-				if(data.userCode == "exist"){//账号已存在，错误提示
+				if(data.userCode === "exist"){//账号已存在，错误提示
 					validateTip(userCode.next(),{"color":"red"},imgNo+ " 该用户账号已存在",false);
-				}else{//账号可用，正确提示
+				}else {//账号可用，正确提示
 					validateTip(userCode.next(),{"color":"green"},imgYes+" 该账号可以使用",true);
 				}
 			},

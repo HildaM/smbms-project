@@ -57,7 +57,9 @@
                 <div>
                     <label >用户角色：</label>
                     <!-- 列出所有的角色分类 -->
-					<select name="userRole" id="userRole"></select>
+					<select name="userRole" id="userRole">
+
+                    </select>
 	        		<font color="red"></font>
                 </div>
                 <div class="providerAddBtn">

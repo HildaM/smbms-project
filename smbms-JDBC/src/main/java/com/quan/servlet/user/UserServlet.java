@@ -17,9 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @ClassName: UserServlet
@@ -37,16 +37,26 @@ public class UserServlet extends HttpServlet {
 
         if (method == null) return;
 
-        if (method.equals("savepwd")) {      // 更新用户密码
+        if (method.equals("savepwd")) {                 // 更新用户密码
             this.updatePwd(req, resp);
         }
-        else if (method.equals("pwdmodify")) {    // 验证旧密码
+        else if (method.equals("pwdmodify")) {          // 验证旧密码
             this.pwdmodify(req, resp);
         }
-        else if (method.equals("query")) {      // 查询操作
+        else if (method.equals("query")) {              // 查询操作
             this.query(req, resp);
         }
+        else if (method.equals("add")) {                // 添加用户
+            this.addUser(req, resp);
+        }
+        else if (method.equals("getrolelist")) {        // 获取角色列表
+            this.getrolelist(req, resp);
+        }
+        else if (method.equals("ucexist")) {            // 检查userCode是否存在
+            this.userCodeExist(req, resp);
+        }
     }
+
 
     @Override
     protected void doHead(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -218,5 +228,127 @@ public class UserServlet extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // 添加User
+    private void addUser(HttpServletRequest req, HttpServletResponse resp) {
+        // 从前端获取参数
+        String userCode = req.getParameter("userCode");
+        String userName = req.getParameter("userName");
+        String userPassword = req.getParameter("userPassword");
+        String gender = req.getParameter("gender");
+        String birthday = req.getParameter("birthday");
+        String phone = req.getParameter("phone");
+        String address = req.getParameter("address");
+        String userRole = req.getParameter("userRole");
+
+        // 将获取的参数封装到User类中
+        // valueOf：将String转换为Integer类   parseInt：将String转换为int基本类型
+        // 由于User类中的参数为Integer，所以应该使用valueOf
+        User _user = new User();
+        _user.setUserCode(userCode);
+        _user.setUserName(userName);
+        _user.setUserPassword(userPassword);
+        _user.setGender(Integer.valueOf(gender));
+        try {
+            _user.setBirthday(new SimpleDateFormat("yyyy-MM-dd").parse(birthday));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        _user.setPhone(phone);
+        _user.setAddress(address);
+        _user.setUserRole(Integer.valueOf(userRole));
+        // 获取当前正在登录者的Id
+        _user.setCreatedBy(((User)req.getSession().getAttribute(Constants.USER_SESSION)).getId());
+        _user.setCreationDate(new Date());
+
+
+        UserServiceImpl userService = new UserServiceImpl();
+        boolean flag = userService.addUser(_user);
+        // 判断是否添加成功
+        // 如果添加成功，则将页面转发到查询页面上。否则就重新刷新页面，再次填写
+        if (flag) {
+            try {
+                resp.sendRedirect(req.getContextPath() + "/jsp/user.do?method=query");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            // 添加失败，跳转到error页面
+            try {
+                req.getRequestDispatcher("useradd.jsp").forward(req, resp);
+            } catch (ServletException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // 获取角色列表
+    private void getrolelist(HttpServletRequest req, HttpServletResponse resp) {
+        List<Role> roleList = null;
+        PrintWriter writer = null;
+
+        try {
+            RoleServiceImpl roleService = new RoleServiceImpl();
+            roleList = roleService.getRoleList();
+
+            // 将获取到的roleList转化为json格式，传回前端
+            resp.setContentType("application/json");
+
+            writer = resp.getWriter();
+            writer.write(JSONArray.toJSONString(roleList));
+            writer.flush();   // 刷新
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            writer.close();
+        }
+    }
+
+
+    private void userCodeExist(HttpServletRequest req, HttpServletResponse resp) {
+        String userCode = req.getParameter("userCode");
+        Map<String, String> resultMap = new HashMap<>();
+
+        // 判断userCode
+        if (userCode == null || userCode.equals("")) {
+            // StringUtils.isNullOrEmpty()
+            // 若userCode为空，则可以使用
+            resultMap.put("userCode", "exist");
+        }
+        else {
+            UserServiceImpl userService = new UserServiceImpl();
+            User user = userService.getUserByUserCode(userCode);
+
+            System.out.println(user == null);
+
+            if (user != null) {
+                // userCode 已存在
+                resultMap.put("userCode", "exist");
+            }
+            else {
+                resultMap.put("userCode", "nonExist");
+            }
+        }
+
+        System.out.println(resultMap);
+
+        // 将resultMap转化为json并返回前端
+        resp.setContentType("application/json");
+        PrintWriter writer = null;
+        try {
+            writer = resp.getWriter();
+            writer.write(JSONArray.toJSONString(resultMap));
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            writer.close();
+        }
+
     }
 }

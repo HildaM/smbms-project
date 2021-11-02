@@ -25,4 +25,10 @@ public interface UserService {
 
     // 获取用户列表
     public List<User> getUserList(String userName, int userRole, int currentPageNo, int pageSize);
+
+    // 添加用户
+    public boolean addUser(User user);
+
+    // 根据userCode查询用户
+    public User getUserByUserCode(String userCode);
 }
