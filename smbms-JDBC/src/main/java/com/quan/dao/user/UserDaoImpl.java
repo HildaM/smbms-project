@@ -76,7 +76,6 @@ public class UserDaoImpl implements UserDao{
         return execute;
     }
 
-
     // 根据用户名或角，查询用户数量
     @Override
     public int getUserCount(Connection connection, String userName, int userRole) throws SQLException {
@@ -243,5 +242,25 @@ public class UserDaoImpl implements UserDao{
         }
 
         return user;
+    }
+
+    // 通过id删除指定User
+    @Override
+    public boolean deleteUserById(Connection connection, Integer userId) throws SQLException {
+        PreparedStatement pstm = null;
+        boolean flag = false;
+
+        if (connection != null) {
+            String sql = "delete from smbms_user where id = ?";
+            Object[] params = {userId};
+
+            if (BaseDao.execute(connection, sql, params, pstm) > 0) {
+                flag = true;
+            }
+
+            BaseDao.closeResource(null, null, pstm);
+        }
+
+        return flag;
     }
 }

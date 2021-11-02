@@ -31,4 +31,7 @@ public interface UserService {
 
     // 根据userCode查询用户
     public User getUserByUserCode(String userCode);
+
+    // 通过id删除指定User
+    public boolean deleteUserById(Integer userId);
 }

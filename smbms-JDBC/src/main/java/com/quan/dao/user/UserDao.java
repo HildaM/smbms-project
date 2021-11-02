@@ -1,6 +1,5 @@
 package com.quan.dao.user;
 
-import com.quan.pojo.Role;
 import com.quan.pojo.User;
 
 import java.sql.Connection;
@@ -32,4 +31,7 @@ public interface UserDao {
 
     // 根据userCode查询用户
     public User getUserByUserCode(Connection connection, String userCode) throws SQLException;
+
+    // 通过id删除指定User
+    public boolean deleteUserById(Connection connection, Integer userId) throws SQLException;
 }

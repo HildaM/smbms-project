@@ -37,23 +37,28 @@ public class UserServlet extends HttpServlet {
 
         if (method == null) return;
 
-        if (method.equals("savepwd")) {                 // 更新用户密码
-            this.updatePwd(req, resp);
-        }
-        else if (method.equals("pwdmodify")) {          // 验证旧密码
-            this.pwdmodify(req, resp);
-        }
-        else if (method.equals("query")) {              // 查询操作
-            this.query(req, resp);
-        }
-        else if (method.equals("add")) {                // 添加用户
-            this.addUser(req, resp);
-        }
-        else if (method.equals("getrolelist")) {        // 获取角色列表
-            this.getrolelist(req, resp);
-        }
-        else if (method.equals("ucexist")) {            // 检查userCode是否存在
-            this.userCodeExist(req, resp);
+        switch (method) {
+            case "savepwd":                     // 更新用户密码
+                this.updatePwd(req, resp);
+                break;
+            case "pwdmodify":                   // 验证旧密码
+                this.pwdmodify(req, resp);
+                break;
+            case "query":                       // 查询操作
+                this.query(req, resp);
+                break;
+            case "add":                         // 添加用户
+                this.addUser(req, resp);
+                break;
+            case "getrolelist":                 // 获取角色列表
+                this.getrolelist(req, resp);
+                break;
+            case "ucexist":                     // 检查userCode是否存在
+                this.userCodeExist(req, resp);
+                break;
+            case "deluser":                     // 通过id删除指定User
+                this.deleteUserById(req,resp);
+                break;
         }
     }
 
@@ -305,11 +310,13 @@ public class UserServlet extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            writer.close();
+            if (writer != null) {
+                writer.close();
+            }
         }
     }
 
-
+    // 判断userCode是否已经存在
     private void userCodeExist(HttpServletRequest req, HttpServletResponse resp) {
         String userCode = req.getParameter("userCode");
         Map<String, String> resultMap = new HashMap<>();
@@ -324,7 +331,7 @@ public class UserServlet extends HttpServlet {
             UserServiceImpl userService = new UserServiceImpl();
             User user = userService.getUserByUserCode(userCode);
 
-            System.out.println(user == null);
+//            System.out.println(user == null);
 
             if (user != null) {
                 // userCode 已存在
@@ -339,16 +346,49 @@ public class UserServlet extends HttpServlet {
 
         // 将resultMap转化为json并返回前端
         resp.setContentType("application/json");
-        PrintWriter writer = null;
-        try {
-            writer = resp.getWriter();
+        try (PrintWriter writer = resp.getWriter()) {
             writer.write(JSONArray.toJSONString(resultMap));
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            writer.close();
+        }
+    }
+
+    // 通过id删除指定User
+    private void deleteUserById(HttpServletRequest req, HttpServletResponse resp) {
+        String uid = req.getParameter("uid");
+        // 进行转化
+        Integer delId = 0;
+        try {
+            delId = Integer.valueOf(uid);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        HashMap<String, String> resultMap = new HashMap<>();
+        // 必须先判断是否合法！！！
+        if (delId <= 0) {
+            resultMap.put("delResult", "notexit");
+        }
+        else {
+            UserServiceImpl userService = new UserServiceImpl();
+
+            if (userService.deleteUserById(delId)) {
+                // 删除成功
+                resultMap.put("delResult", "true");
+            }
+            else {
+                resultMap.put("delResult", "false");
+            }
+        }
+
+        // 将resultMap转换为json返回给前端
+        resp.setContentType("application/json");
+        try (PrintWriter writer = resp.getWriter()) {
+            writer.write(JSONArray.toJSONString(resultMap));
+            writer.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

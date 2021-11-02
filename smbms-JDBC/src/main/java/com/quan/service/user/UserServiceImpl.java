@@ -129,11 +129,22 @@ public class UserServiceImpl implements UserService{
 
         try {
             connection = BaseDao.getConnection();
+            // 开启JDBC事务管理
+            connection.setAutoCommit(false);
             if (userDao.addUser(connection, user)) {
                 flag = true;
+                connection.commit();   // 提交事务
             }
         } catch (SQLException e) {
             e.printStackTrace();
+
+            try {
+                System.out.println("添加用户失败，启动回滚===================");
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+
         } finally {
             BaseDao.closeResource(connection, null, null);
         }
@@ -157,6 +168,37 @@ public class UserServiceImpl implements UserService{
         }
 
         return user;
+    }
+
+    // 通过id删除指定User
+    @Override
+    public boolean deleteUserById(Integer userId) {
+        Connection connection = null;
+        boolean flag = false;
+
+        try {
+            connection = BaseDao.getConnection();
+            // 开启JDBC事务
+            connection.setAutoCommit(false);
+            if (userDao.deleteUserById(connection, userId)) {
+                flag = true;
+                connection.commit();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            try {
+                System.out.println("删除用户失败，进行回滚=============");
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+
+        } finally {
+            BaseDao.closeResource(connection, null, null);
+        }
+
+        return flag;
     }
 
 }
