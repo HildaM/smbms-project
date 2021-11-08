@@ -11,6 +11,7 @@
 
     <modules>
         <module>smbms-JDBC</module>
+        <module>bookStore-SSMFramework</module>
     </modules>
 
     <properties>
