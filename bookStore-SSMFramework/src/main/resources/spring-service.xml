@@ -8,7 +8,7 @@
     <context:component-scan base-package="com.quan.service"/>
 
     <!-- 2. 将所有的业务类，注入到Spring，可以通过注解或配置文件   -->
-    <bean id="BookServiceImpl" class="com.quan.service.BookServiceImpl">
+    <bean id="bookServiceImpl" class="com.quan.service.BookServiceImpl">
         <property name="bookMapper" ref="bookMapper"/>
     </bean>
 
