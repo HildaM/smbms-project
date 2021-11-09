@@ -3,5 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+    <!--  配置数据源，交由spring来做  -->
+
+    <!-- 别名  -->
+    <typeAliases>
+        <package name="com.quan.entity"/>
+    </typeAliases>
+
+
+    <mappers>
+        <mapper class="com.quan.dao.BookMapper"/>
+    </mappers>
+
 
 </configuration>

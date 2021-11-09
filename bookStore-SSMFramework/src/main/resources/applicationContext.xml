@@ -3,6 +3,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-
+    <!-- 关联配置文件  -->
+    <import resource="classpath:spring-dao.xml"/>
+    <import resource="classpath:spring-service.xml"/>
+    <import resource="classpath:spring-mvc.xml"/>
 
 </beans>
