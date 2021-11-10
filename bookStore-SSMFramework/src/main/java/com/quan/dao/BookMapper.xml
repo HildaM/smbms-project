@@ -23,13 +23,25 @@
     </update>
 
     <!-- 查询一本书  -->
-    <select id="queryBookById" parameterType="int">
+    <select id="queryBookById" parameterType="int" resultType="Books">
         select * from ssmbuild.books where bookID = #{bookId}
     </select>
 
     <!-- 查询全部书  -->
     <select id="queryAllBook" resultType="Books">
         select * from ssmbuild.books
+    </select>
+
+    <!-- 查询一本书  -->
+    <select id="queryBookName" parameterType="string" resultType="Books">
+
+        select * from ssmbuild.books
+        <where>
+            <if test="bookName != null">
+                <bind name="bookName" value="'%' + bookName + '%'"/>
+                bookName like #{bookName}
+            </if>
+        </where>
     </select>
 
 </mapper>

@@ -11,7 +11,7 @@ import java.util.List;
  * @author: Hilda   Hilda_quan@163.com
  * @date: 2021/11/9 9:57
  */
-public class BookMapperImpl extends SqlSessionDaoSupport implements BookMapper {
+public abstract class BookMapperImpl extends SqlSessionDaoSupport implements BookMapper {
     @Override
     public int addBook(Books books) {
         return 0;
